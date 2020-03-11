@@ -1,1 +1,1 @@
-# Vivaio-Jersey-Vue
+Java jersey, Vue.js, Maria DB APP
