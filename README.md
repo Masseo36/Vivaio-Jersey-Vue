@@ -1,1 +1,2 @@
-Java jersey, Vue.js, Maria DB APP
+Jersey Client Example – Jersey 2 Client API
+with Vue.js & MariaDB
