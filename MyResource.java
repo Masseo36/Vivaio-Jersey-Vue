@@ -13,8 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.topjavatutorial.dao.EmployeeDAO;
-import com.topjavatutorial.dao.MezzoDAO;
 import com.topjavatutorial.entità.Employee;
 import com.topjavatutorial.entità.Mezzo;
 import com.topjavatutorial.service.EmployeeService;
@@ -22,10 +20,32 @@ import com.topjavatutorial.service.MezzoService;
 
 @Path("/")
 public class MyResource {
+
 	// I metodi usati qua chiamano all' interno un metodo creato nella classe
 	// Service, che a sua volta chiama metodi della classe DAO
 	private EmployeeService employeeService = new EmployeeService();
 	private MezzoService mezzoService = new MezzoService();
+
+	// Login
+	@POST
+	@Produces("application/json")
+	@Path("login/{username}" + "login/{password}")
+	public List<Employee> login(@PathParam("username") String username, @PathParam("password") String password) {
+
+		List<Employee> employees = new ArrayList<Employee>();
+		employees.addAll(employeeService.login(username, password));
+		System.out.println(employees.toString());
+		return employees;
+	}
+
+	// Registro employee
+	@POST
+	@Path("/registraEmployee")
+	@Consumes("application/json")
+	public Response registraEmployee(Employee emp) {
+		employeeService.registraEmployee(emp);
+		return Response.ok().build();
+	}
 
 //Ottengo tutti gli employees
 	@GET
@@ -69,8 +89,8 @@ public class MyResource {
 		employeesById.addAll(employeeService.findEmployeesById(id));
 		return employeesById;
 	}
-	
-	//Ottengo employee per id, per la pagina dettagli
+
+	// Ottengo employee per id, per la pagina dettagli
 	@GET
 	@Path("employee/{id}")
 	@Consumes("application/json")
@@ -229,6 +249,7 @@ public class MyResource {
 		mezziByIdMezzo.addAll(mezzoService.findMezziByIdMezzo(idMezzo));
 		return mezziByIdMezzo;
 	}
+
 	// Cerco mezzo per marca, modello, alimentazione
 	@POST
 	@Path("ricercaMezzi/{marca}" + "ricercaMezzi/{modello}" + "ricercaMezzi/{carburante}")
@@ -289,7 +310,7 @@ public class MyResource {
 		return mezzi;
 	}
 
-	//Ottengo mezzo per id, per la pagina dettagli
+	// Ottengo mezzo per id, per la pagina dettagli
 	@GET
 	@Path("mezzo/{idMezzo}")
 	@Consumes("application/json")
