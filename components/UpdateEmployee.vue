@@ -96,7 +96,7 @@ export default {
               console.log(response.data);
               this.refresh();
               //Terminato il metodo, andrò alla seguente pagina
-              this.$router.push("/");
+              this.$router.push("/employees");
             })
             .catch(e => {
               console.log(e);

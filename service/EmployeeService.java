@@ -1,18 +1,28 @@
 package com.topjavatutorial.service;
 
-import com.topjavatutorial.entità.Employee;
-import com.topjavatutorial.entità.Mezzo;
-
 import java.util.List;
-
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import com.topjavatutorial.entità.Employee;
 import com.topjavatutorial.dao.EmployeeDAO;
 
 public class EmployeeService {
 
 	private EmployeeDAO employeeDAO = new EmployeeDAO();
+	
+	//Login
+	public List<Employee> login(String username, String password) {
+		List<Employee> employees = employeeDAO.login(username, password);
+		return employees;
+		
+	}
+	
+	// Registro employee
+	public Response registraEmployee(Employee emp) {
+		employeeDAO.registraEmployee(emp);
+		return Response.ok().build();
+	}
 
 	// Ottengo tutti gli employees
 	public List<Employee> getEmployees() {

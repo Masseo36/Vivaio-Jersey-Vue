@@ -67,8 +67,7 @@ export default {
   data() {
     return {
       employees: [],
-      surnameEmployee: "",
-      mezzi: []
+      surnameEmployee: ""
     };
   },
   methods: {

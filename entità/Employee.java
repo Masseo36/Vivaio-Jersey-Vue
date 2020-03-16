@@ -18,6 +18,10 @@ public class Employee {
 	private String surname;
 	@Column
 	private int age;
+	@Column
+	private String username;
+	@Column
+	private String password;
 
 	public int getId() {
 		return id;
@@ -51,8 +55,26 @@ public class Employee {
 		this.age = age;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", age=" + age + "]";
+		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", age=" + age + ", username="
+				+ username + ", password=" + password + "]";
 	}
+
 }

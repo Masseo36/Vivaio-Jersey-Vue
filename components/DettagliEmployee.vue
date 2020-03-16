@@ -76,7 +76,7 @@ export default {
           .then(response => {
             console.log(response.data);
             this.$emit("refreshData");
-            this.$router.push("/");
+            this.$router.push("/employees");
           })
           .catch(e => {
             console.log(e);

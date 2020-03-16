@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+import LoginComponent from "./views/Login.vue"
+import RegistraEmployee from "./views/RegistraEmployee"
+import RecuperoPassword from "./views/RecuperoPassword"
 
 import Employee from "./components/Employee.vue";
 import AddEmployee from "./components/AddEmployee.vue";
@@ -16,13 +19,35 @@ import SearchMezzo from "./components/SearchMezzo.vue";
 import UpdateMezzo from "./components/UpdateMezzo.vue";
 import DettagliMezzo from "./components/DettagliMezzo.vue";
 
+
 Vue.use(Router);
 
 export default new Router({
     mode: "history",
     routes: [
         {
-            path: "/",
+            path: '/',
+            redirect: {
+                name: "login"
+            }
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: LoginComponent
+        },
+        {
+            path: "/registraEmployee",
+            name: "registraEmployee",
+            component: RegistraEmployee
+        },
+        {
+            path: "/recuperoPassword",
+            name: "recuperoPassword",
+            component: RecuperoPassword
+        },
+        {
+            path: "/employees",
             name: "employees",
             alias: "/employee",
             component: EmployeesList,
@@ -84,7 +109,7 @@ export default new Router({
             component: Mezzo,
             props: true
         },
-         // Questo è il component creato per vedere i dettagli di "mezzo"
+        // Questo è il component creato per vedere i dettagli di "mezzo"
         {
             path: "/mezzi/dettagli/:idMezzo",
             name: "mezzo-dettagli",

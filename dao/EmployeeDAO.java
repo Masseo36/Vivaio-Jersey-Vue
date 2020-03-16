@@ -1,17 +1,66 @@
 package com.topjavatutorial.dao;
 
 import java.util.List;
-
 import javax.ws.rs.PathParam;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.topjavatutorial.AES;
 import com.topjavatutorial.entità.Employee;
-import com.topjavatutorial.entità.Mezzo;
 
 public class EmployeeDAO {
+
+	// Login
+	public List<Employee> login(@PathParam("username") String username, @PathParam("password") String password) {
+
+		// Cripto la password con sistema AES 256 – Advanced Encryption Standard
+		final String secretKey = "ssshhhhhhhhhhh!!!!";
+
+		String originalPassword = password;
+		String encryptedPassword = AES.encrypt(originalPassword, secretKey);
+		// String decryptedPassword = AES.decrypt(encryptedPassword, secretKey);
+
+		Session session = SessionUtil.getSession();
+		Query query = session
+				.createQuery("from Employee emp where emp.username =:username and emp.password =:password");
+		query.setParameter("username", username);
+		query.setParameter("password", encryptedPassword);
+		List<Employee> employees = query.list();
+		session.close();
+		return employees;
+	}
+
+	// Registro employee
+	public void registraEmployee(Employee bean) {
+		Session session = SessionUtil.getSession();
+		Transaction tx = session.beginTransaction();
+		registraEmployee(session, bean);
+		tx.commit();
+		session.close();
+	}
+
+	private void registraEmployee(Session session, Employee bean) {
+
+		Query query = session.createQuery("from Employee");
+		List<Employee> employees = query.list();
+
+		Employee employee = new Employee();
+
+		// Cripto la password con sistema AES 256 – Advanced Encryption Standard
+		final String secretKey = "ssshhhhhhhhhhh!!!!";
+
+		String originalPassword = bean.getPassword();
+		String encryptedPassword = AES.encrypt(originalPassword, secretKey);
+		// String decryptedPassword = AES.decrypt(encryptedPassword, secretKey);
+
+		employee.setName(bean.getName());
+		employee.setSurname(bean.getSurname());
+		employee.setAge(bean.getAge());
+		employee.setUsername(bean.getUsername());
+		employee.setPassword(encryptedPassword);
+		session.save(employee);
+	}
 
 	// Creo un employee
 	public void addEmployee(Employee bean) {
@@ -28,6 +77,8 @@ public class EmployeeDAO {
 		employee.setName(bean.getName());
 		employee.setSurname(bean.getSurname());
 		employee.setAge(bean.getAge());
+		employee.setUsername(bean.getName());
+		employee.setPassword("password");
 		session.save(employee);
 	}
 

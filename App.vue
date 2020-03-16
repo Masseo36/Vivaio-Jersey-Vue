@@ -3,11 +3,13 @@
     <div class="site-info">
       <h1>Jersey & Vue example</h1>
     </div>
-   
-    <app-header></app-header>
-   
-    <br />
-    <router-view />
+    <div v-if="this.authenticated">
+      <app-header></app-header>
+    </div>
+    <div id="nav">
+      <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+    </div>
+    <router-view @authenticated="setAuthenticated" />
   </div>
 </template>
  
@@ -18,7 +20,29 @@ export default {
     //Metto il component header, quello comune a tutte le pagine
     "app-header": Header
   },
-  name: "app"
+  name: "app",
+  data() {
+    return {
+      authenticated: false,
+      mockAccount: {
+        username: "nraboy",
+        password: "password"
+      }
+    };
+  },
+  mounted() {
+    if (!this.authenticated) {
+      this.$router.replace("/login", () => {});
+    }
+  },
+  methods: {
+    setAuthenticated(status) {
+      this.authenticated = status;
+    },
+    logout() {
+      this.authenticated = false;
+    }
+  }
 };
 </script>
  
@@ -43,4 +67,3 @@ export default {
   margin-right: 5px;
 }
 </style>
-

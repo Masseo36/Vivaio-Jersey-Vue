@@ -32,7 +32,7 @@ export default {
   methods: {
     changeRout() {
       if (event.target.value == "Lista employees") {
-        this.$router.push("/", () => {});
+        this.$router.push("/employees", () => {});
       }
       if (event.target.value == "Aggiungi employee") {
         this.$router.push("/create", () => {});

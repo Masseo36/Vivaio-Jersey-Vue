@@ -88,8 +88,7 @@ export default {
           .then(response => {
             this.employee.id = response.data.id;
             this.refresh();
-            this.$router.push("/");
-            console.log(response.data);
+            this.$router.push("/employees");
           })
           .catch(e => {
             console.log(e);

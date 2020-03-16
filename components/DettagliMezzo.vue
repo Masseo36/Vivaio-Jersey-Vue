@@ -32,12 +32,13 @@
     >CANCELLA</button>
     <p></p>
     <button
-      v-on:click="goToPage()"
+      type="button"
       class="btn btn-success"
       style="position:relative; right: 45em;top: 12em;"
+      v-on:click="goToPage()"
     >MODIFICA</button>
     <div class="mezzoDetails">
-      <h2 style="color:orangered;;">DETTAGLI MEZZO</h2>
+      <h2 style="color:orangered;">DETTAGLI MEZZO</h2>
     </div>
   </div>
 </template>
