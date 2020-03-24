@@ -2,7 +2,9 @@ package com.topjavatutorial;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Attenzione! Non posso importare javax.mail.Session perchè in contrasto con org.hibernate.Session
+//(ha lo stesso nome), così creerò la Sessione direttamente nel metodo con 
+//javax.mail.Session session = javax.mail.Session.getInstance(prop, null); 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,6 +23,14 @@ import com.topjavatutorial.service.MezzoService;
 @Path("/")
 public class MyResource {
 
+	// Send e-mail
+	@POST
+	@Produces("application/json")
+	@Path("registraEmployee/{username}" + "registraEmployee/{password}")
+	public void sendEmail(@PathParam("username") String username, @PathParam("password") String password) {
+		employeeService.sendEmail(username, password);
+	}
+
 	// I metodi usati qua chiamano all' interno un metodo creato nella classe
 	// Service, che a sua volta chiama metodi della classe DAO
 	private EmployeeService employeeService = new EmployeeService();
@@ -31,10 +41,8 @@ public class MyResource {
 	@Produces("application/json")
 	@Path("login/{username}" + "login/{password}")
 	public List<Employee> login(@PathParam("username") String username, @PathParam("password") String password) {
-
 		List<Employee> employees = new ArrayList<Employee>();
 		employees.addAll(employeeService.login(username, password));
-		System.out.println(employees.toString());
 		return employees;
 	}
 
@@ -45,6 +53,16 @@ public class MyResource {
 	public Response registraEmployee(Employee emp) {
 		employeeService.registraEmployee(emp);
 		return Response.ok().build();
+	}
+
+	// Recupera password
+	@POST
+	@Path("/recuperaPassword/{username}")
+	@Consumes("application/json")
+	public List<String> recuperaPassword(@PathParam("username") String username) {
+		List<String> passwordRecuperata = new ArrayList<String>();
+		passwordRecuperata.addAll(employeeService.recuperaPassword(username));
+		return passwordRecuperata;
 	}
 
 //Ottengo tutti gli employees
@@ -181,7 +199,6 @@ public class MyResource {
 
 		List<Employee> foundedEmployees = new ArrayList<Employee>();
 		foundedEmployees.addAll(employeeService.findEmployeeComplete(age, name, surname));
-		System.out.println(foundedEmployees.toString());
 		return foundedEmployees;
 	}
 
@@ -190,9 +207,17 @@ public class MyResource {
 	@Path("/employees/update/{id}")
 	@Consumes("application/json")
 	public Response updateEmployee(@PathParam("id") int id, Employee emp) {
-		System.out.println("Qua");
-		System.out.println(emp.getAge());
 		employeeService.updateEmployee(id, emp);
+		return Response.ok().build();
+	}
+
+	// Cambia password iniziale
+	@PUT
+	@Path("/CambiaPasswordIniziale/{id}" + "/CambiaPasswordIniziale/{nuovaPassword}")
+	@Consumes("application/json")
+	public Response cambiaPasswordIniziale(@PathParam("id") int id, @PathParam("nuovaPassword") String nuovaPassword,
+			Employee emp) {
+		employeeService.cambiaPasswordIniziale(id, nuovaPassword, emp);
 		return Response.ok().build();
 	}
 

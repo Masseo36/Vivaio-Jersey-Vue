@@ -66,8 +66,12 @@ export default {
   name: "employees-list",
   data() {
     return {
+      //Questa riga consente di portare in questa pagina l'id dell'oggetto
+      //dalla pagina di provenienza
+      id: this.$route.params.id,
       employees: [],
-      surnameEmployee: ""
+      surnameEmployee: "",
+      isEditing: false
     };
   },
   methods: {
@@ -95,7 +99,7 @@ export default {
   },
   mounted() {
     this.retrieveEmployees();
-  }
+  },
 };
 </script>
  

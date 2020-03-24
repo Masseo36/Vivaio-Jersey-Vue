@@ -3,13 +3,13 @@
     <div class="site-info">
       <h1>Jersey & Vue example</h1>
     </div>
-    <div v-if="this.authenticated">
+    <div v-if="this.$session.exists()">
       <app-header></app-header>
     </div>
-    <div id="nav">
+   <!--<div id="nav">
       <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
-    </div>
-    <router-view @authenticated="setAuthenticated" />
+    </div>-->
+   <router-view @authenticated="setAuthenticated" />
   </div>
 </template>
  
@@ -31,7 +31,7 @@ export default {
     };
   },
   mounted() {
-    if (!this.authenticated) {
+    if (!this.$session.exists()) {
       this.$router.replace("/login", () => {});
     }
   },
@@ -40,7 +40,8 @@ export default {
       this.authenticated = status;
     },
     logout() {
-      this.authenticated = false;
+      this.$session.destroy()
+      this.authenticated = false
     }
   }
 };

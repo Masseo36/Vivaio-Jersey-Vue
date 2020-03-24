@@ -40,31 +40,31 @@
     <div class="btn-group">
       <!-- Ricerca per età -->
       <div v-if="age > 0 && name.length == 0 && surname.length == 0">
-        <button v-on:click="searchEmployees" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployees" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca per nome -->
       <div v-else-if="age == 0 && name.length > 0 && surname == 0">
-        <button v-on:click="searchEmployeesByName" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesByName" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca per cognome -->
       <div v-else-if="age == 0 && name.length == 0 && surname.length > 0 ">
-        <button v-on:click="searchEmployeesBySurname" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesBySurname" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca per età e nome -->
       <div v-else-if="age > 0 && name.length > 0 && surname.length == 0">
-        <button v-on:click="searchEmployeesByAgeAndName" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesByAgeAndName" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca per età e cognome-->
       <div v-else-if="age > 0 && name.length == 0 && surname.length > 0">
-        <button v-on:click="searchEmployeesByAgeAndSurname" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesByAgeAndSurname" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca per nome e cognome-->
       <div v-else-if="age == 0 && name.length > 0 && surname.length > 0">
-        <button v-on:click="searchEmployeesByNameAndSurname" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesByNameAndSurname" class="btn btn-success">Cerca</button>
       </div>
       <!-- Ricerca completa-->
       <div v-else-if="age > 0 && name.length > 0 && surname.length > 0">
-        <button v-on:click="searchEmployeesComplete" class="btn btn-success">Search</button>
+        <button v-on:click="searchEmployeesComplete" class="btn btn-success">Cerca</button>
       </div>
     </div>
 

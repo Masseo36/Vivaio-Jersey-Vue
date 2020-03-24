@@ -17,6 +17,7 @@
           <option>Cerca mezzo</option>
         </select>
       </div>
+      <button type="button" class="btn btn-success btn-lg" v-on:click="logout()">Logout</button>
     </nav>
   </div>
 </template>
@@ -26,7 +27,7 @@ export default {
   data() {
     return {
       menùEmployee: "Menù employee",
-      menùMezzo: "Menù mezzo"
+      menùMezzo: "Menù mezzo",
     };
   },
   methods: {
@@ -51,6 +52,10 @@ export default {
       }
       this.menùEmployee = "Menù employee";
       this.menùMezzo = "Menù mezzo";
+    },
+    logout() {
+      this.$session.destroy()
+      this.$router.push("/login", () => {});
     }
   }
 };

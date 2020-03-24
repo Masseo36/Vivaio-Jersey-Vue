@@ -1,24 +1,41 @@
 package com.topjavatutorial.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+
+//Attenzione! Non posso importare javax.mail.Session perchè in contrasto con org.hibernate.Session
+//(ha lo stesso nome), così creerò la Sessione direttamente nel metodo con 
+//javax.mail.Session session = javax.mail.Session.getInstance(prop, null); 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.ws.rs.PathParam;
 import org.hibernate.Query;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.topjavatutorial.AES;
+import com.topjavatutorial.security.AES;
+import com.sun.mail.smtp.SMTPTransport;
 import com.topjavatutorial.entità.Employee;
+import com.topjavatutorial.SendMail;
 
 public class EmployeeDAO {
 
 	// Login
 	public List<Employee> login(@PathParam("username") String username, @PathParam("password") String password) {
 
-		// Cripto la password con sistema AES 256 – Advanced Encryption Standard
 		final String secretKey = "ssshhhhhhhhhhh!!!!";
 
-		String originalPassword = password;
-		String encryptedPassword = AES.encrypt(originalPassword, secretKey);
+		List<Employee> employees = new ArrayList<Employee>();
+
+		// Cripto password inserita
+		String encryptedPasswordToFilter = AES.encrypt(password, secretKey);
+		String encryptedPassword = encryptedPasswordToFilter.replace('/', 'X');
 		// String decryptedPassword = AES.decrypt(encryptedPassword, secretKey);
 
 		Session session = SessionUtil.getSession();
@@ -26,8 +43,12 @@ public class EmployeeDAO {
 				.createQuery("from Employee emp where emp.username =:username and emp.password =:password");
 		query.setParameter("username", username);
 		query.setParameter("password", encryptedPassword);
-		List<Employee> employees = query.list();
+		employees = query.list();
 		session.close();
+
+		System.out.println(encryptedPassword);
+		System.out.println(encryptedPassword);
+		System.out.println(encryptedPassword);
 		return employees;
 	}
 
@@ -47,12 +68,17 @@ public class EmployeeDAO {
 
 		Employee employee = new Employee();
 
-		// Cripto la password con sistema AES 256 – Advanced Encryption Standard
+		// Cripto la password con sistema AES – Advanced Encryption Standard
 		final String secretKey = "ssshhhhhhhhhhh!!!!";
 
-		String originalPassword = bean.getPassword();
-		String encryptedPassword = AES.encrypt(originalPassword, secretKey);
-		// String decryptedPassword = AES.decrypt(encryptedPassword, secretKey);
+		Random random = new Random();
+		int randomNumber = random.nextInt(900) + 100;
+
+		String welcomePassword = "Welcome " + bean.getName() + " " + randomNumber;
+		// String originalPassword = bean.getPassword();
+		String encryptedPasswordToFilter = AES.encrypt(welcomePassword, secretKey);
+		String encryptedPassword = encryptedPasswordToFilter.replace('/', 'X');
+		String decryptedPassword = AES.decrypt(encryptedPasswordToFilter, secretKey);
 
 		employee.setName(bean.getName());
 		employee.setSurname(bean.getSurname());
@@ -60,6 +86,23 @@ public class EmployeeDAO {
 		employee.setUsername(bean.getUsername());
 		employee.setPassword(encryptedPassword);
 		session.save(employee);
+		SendMail.sendEmail(bean.getUsername(), decryptedPassword);
+	}
+
+	// Recupera password
+	public List<String> recuperaPassword(@PathParam("username") String username) {
+		Session session = SessionUtil.getSession();
+		Query query = session.createQuery("SELECT E.password FROM Employee E WHERE E.username =:username");
+		query.setParameter("username", username);
+		List<String> passwordRecuperata = query.list();
+		session.close();
+
+		// Decripto password
+		final String secretKey = "ssshhhhhhhhhhh!!!!";
+		String decryptedPassword = AES.decrypt(passwordRecuperata.get(0).toString(), secretKey);
+
+		SendMail.sendPasswordRecuperata(username, decryptedPassword);
+		return passwordRecuperata;
 	}
 
 	// Creo un employee
@@ -198,6 +241,7 @@ public class EmployeeDAO {
 	public int updateEmployee(int id, Employee emp) {
 		if (id <= 0)
 			return 0;
+
 		Session session = SessionUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		String hql = "update Employee set name =:name, surname =:surname, age =:age where id =:id";
@@ -206,6 +250,34 @@ public class EmployeeDAO {
 		query.setString("name", emp.getName());
 		query.setString("surname", emp.getSurname());
 		query.setInteger("age", emp.getAge());
+		int rowCount = query.executeUpdate();
+		System.out.println("Rows affected: " + rowCount);
+		tx.commit();
+		session.close();
+		return rowCount;
+	}
+
+	// Cambia password iniziale
+	public int cambiaPasswordIniziale(int id, String nuovaPassword, Employee emp) {
+		if (id <= 0)
+			return 0;
+
+		// Cripto la password con sistema AES 256 – Advanced Encryption Standard
+		final String secretKey = "ssshhhhhhhhhhh!!!!";
+
+		// La seguente riga per togliere dalla password il carattere "/", ove presente,
+		// che manderebbe
+		// a ramengo il path
+		String encryptedPasswordToFilter = AES.encrypt(nuovaPassword, secretKey);
+		String encryptedPassword = encryptedPasswordToFilter.replace('/', 'X');
+
+		Session session = SessionUtil.getSession();
+		Transaction tx = session.beginTransaction();
+		String hql = "update Employee set password =:password, active =:active where id =:id";
+		Query query = session.createQuery(hql);
+		query.setInteger("id", id);
+		query.setInteger("active", 1);
+		query.setString("password", encryptedPassword);
 		int rowCount = query.executeUpdate();
 		System.out.println("Rows affected: " + rowCount);
 		tx.commit();

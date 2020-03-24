@@ -22,6 +22,8 @@ public class Employee {
 	private String username;
 	@Column
 	private String password;
+	@Column
+	private boolean active;
 
 	public int getId() {
 		return id;
@@ -71,10 +73,17 @@ public class Employee {
 		this.password = password;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", age=" + age + ", username="
-				+ username + ", password=" + password + "]";
+				+ username + ", password=" + password + ", active=" + active + "]";
 	}
-
 }

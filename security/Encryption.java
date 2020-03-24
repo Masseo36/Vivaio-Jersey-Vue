@@ -1,4 +1,4 @@
-package com.topjavatutorial;
+/*package com.topjavatutorial.security;
 
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -36,4 +36,4 @@ public class Encryption {
 	    }
 	    return null;
 	}
-}
+}*/

@@ -59,11 +59,11 @@
                 class="form-control"
                 name="username"
                 v-model="employee.username"
-                placeholder="Username"
+                placeholder="Inserisci e-mail"
               />
             </div>
           </div>
-          <div class="form-group">
+          <!--<div class="form-group">
             <div class="input-group">
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-lock"></span>
@@ -76,7 +76,7 @@
                 placeholder="Password"
               />
             </div>
-          </div>
+          </div>-->
           <div class="form-group text-center">
             <button
               type="button"
@@ -101,10 +101,11 @@ export default {
         name: "",
         surname: "",
         age: "",
-        username: "",
-        password: ""
+        username: ""
+        // password: ""
       },
-      employees: []
+      employees: [],
+      isPresent: false
     };
   },
   methods: {
@@ -115,6 +116,7 @@ export default {
         .get("/employees")
         .then(response => {
           this.employees = response.data; // JSON are parsed automatically.
+          //console.log(response.data);
         })
         .catch(e => {
           console.log(e);
@@ -126,36 +128,54 @@ export default {
         surname: this.employee.surname,
         age: this.employee.age,
         username: this.employee.username,
-        password: this.employee.password
+        // password: this.employee.password,
+        active: this.employee.active
       };
+      //condizioni per inserire valori adatti
       if (
         this.employee.name.length == 0 ||
         this.employee.surname.length == 0 ||
         this.employee.age <= 0 ||
-        this.employee.username.length == 0 ||
-        this.employee.password.length == 0
+        this.employee.username.length ==
+          0 /*||
+        this.employee.password.length == 0*/
       ) {
         window.alert("Riempire tutti i campi!");
+      } else if (!this.employee.username.includes("@")) {
+        window.alert("Inserire un indirizzo e-mail corretto!");
       } else {
-        //controllo che non esista uno username uguale
+        //controllo che non esista uno username uguale e setto la variabile isPresent
         this.employees.forEach(employee => {
-          if (employee.username == data.username) {
-            window.alert("Username già presente!");
-          } else {
-            http
-              .post("/registraEmployee", data)
-              .then(response => {
-                this.employee = response.data;
-                this.$emit("authenticated", true);
-                this.$router.replace("/employees", () => {});
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          }
+          if (employee.username == data.username) this.isPresent = true;
         });
+        if (this.isPresent == true) {
+          window.alert("e-mail già presente!");
+          //se isPresent è true do il messaggio di errore e risetto variabile a false
+          this.isPresent = false;
+        } else {
+          //Invio mail al nuovo Employee registrato
+          // this.sendEmail();
+          http
+            .post("/registraEmployee/", data)
+            .then(response => {
+              this.employee = response.data;
+              //this.$emit("authenticated", true);
+              this.$router.replace("/primoAccesso", () => {});
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        }
       }
       this.submitted = true;
+    },
+    sendEmail() {
+      http.post(
+        "/registraEmployee/" +
+          this.employee.username +
+          "registraEmployee/" +
+          this.employee.password
+      );
     }
   },
   mounted() {

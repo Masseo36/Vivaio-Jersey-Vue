@@ -85,7 +85,7 @@
 
     <div class="btn-group" style="position:fixed; top: 350px; right: 750px;">
       <div v-if="marca.length > 0 || modello.length > 0 || carburante.length > 0">
-        <button v-on:click="getForm" class="btn btn-success">Search</button>
+        <button v-on:click="getForm" class="btn btn-success">Cerca</button>
       </div>
     </div>
     <ul class="search-result-mezzo">

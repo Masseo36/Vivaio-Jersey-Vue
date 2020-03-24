@@ -63,16 +63,20 @@ export default {
           .post("/login/" + this.username + "login/" + this.password)
           .then(response => {
             this.employees = response.data; // JSON are parsed automatically.
-            if (this.employees.length > 0) {
+            this.$session.start()
+            console.log(this.$session.id())
+            if (this.employees.length > 0 && this.employees[0].active == 1) {
               this.$emit("authenticated", true);
               this.$router.replace("/employees", () => {});
-            } else {
-              window.alert("Employee non trovato!");
-            }
+            } else if (
+              this.employees.length > 0 &&
+              this.employees[0].active == 0
+            ) {
+              this.$router.replace("/primoAccesso", () => {});
+            } else if (this.employees.length == 0)
+              window.alert("Username e/o password errati!");
           });
-      } else {
-        window.alert("Riempire tutti i campi!");
-      }
+      } else window.alert("Riempire tutti i campi!");
     }
   }
 };

@@ -4,6 +4,8 @@ import Router from "vue-router";
 import LoginComponent from "./views/Login.vue"
 import RegistraEmployee from "./views/RegistraEmployee"
 import RecuperoPassword from "./views/RecuperoPassword"
+import PrimoAccesso from "./views/PrimoAccesso"
+import CambiaPasswordIniziale from "./views/CambiaPasswordIniziale"
 
 import Employee from "./components/Employee.vue";
 import AddEmployee from "./components/AddEmployee.vue";
@@ -25,6 +27,16 @@ Vue.use(Router);
 export default new Router({
     mode: "history",
     routes: [
+        {
+            path: "/CambiaPasswordIniziale/:id",
+            name: "CambiaPasswordIniziale",
+            component: CambiaPasswordIniziale
+        },
+        {
+            path: "/PrimoAccesso",
+            name: "PrimoAccesso",
+            component: PrimoAccesso
+        },
         {
             path: '/',
             redirect: {
@@ -63,18 +75,17 @@ export default new Router({
         },
         // Questo è il component creato per vedere i dettagli di "employee"
         {
-            path: "/employees/update/:id",
-            name: "employee-update",
-            component: UpdateEmployee,
-            props: true
-        },
-        {
             path: "/employees/dettagli/:id",
             name: "employee-dettagli",
             component: DettagliEmployee,
             props: true
         },
-
+        {
+            path: "/employees/update/:id",
+            name: "employee-update",
+            component: UpdateEmployee,
+            props: true
+        },
         {
             path: "/create",
             name: "create",

@@ -10,19 +10,30 @@ import com.topjavatutorial.dao.EmployeeDAO;
 public class EmployeeService {
 
 	private EmployeeDAO employeeDAO = new EmployeeDAO();
-	
-	//Login
+
+	// Login
 	public List<Employee> login(String username, String password) {
 		List<Employee> employees = employeeDAO.login(username, password);
 		return employees;
-		
+
 	}
-	
+
+	// Send e-mail
+	public void sendEmail(@PathParam("username") String username, @PathParam("password") String password) {
+		employeeDAO.sendEmail(username, password);
+	}
+
 	// Registro employee
 	public Response registraEmployee(Employee emp) {
 		employeeDAO.registraEmployee(emp);
 		return Response.ok().build();
 	}
+	
+	// Recupera password
+		public List<String> recuperaPassword(@PathParam("username") String username) {
+			List<String> passwordRecuperata = employeeDAO.recuperaPassword(username);
+			return passwordRecuperata;
+		}
 
 	// Ottengo tutti gli employees
 	public List<Employee> getEmployees() {
@@ -35,12 +46,11 @@ public class EmployeeService {
 		employeeDAO.addEmployee(emp);
 		return Response.ok().build();
 	}
-	
-	//Cerco employee per id
+
+	// Cerco employee per id
 	public List<Employee> findEmployeesById(int id) {
 		List<Employee> employeesById = employeeDAO.findEmployeeById(id);
 		return employeesById;
-
 	}
 
 	// Cerco un employee per età
@@ -86,10 +96,19 @@ public class EmployeeService {
 		List<Employee> foundedEmployees = employeeDAO.findEmployeeComplete(age, name, surname);
 		return foundedEmployees;
 	}
-	
-	//Aggiorno employee
+
+	// Aggiorno employee
 	public Response updateEmployee(int id, Employee emp) {
 		int count = employeeDAO.updateEmployee(id, emp);
+		if (count == 0) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		return Response.ok().build();
+	}
+
+	// Cambia password iniziale
+	public Response cambiaPasswordIniziale(int id, String nuovaPassword, Employee emp) {
+		int count = employeeDAO.cambiaPasswordIniziale(id, nuovaPassword, emp);
 		if (count == 0) {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
