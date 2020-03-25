@@ -9,7 +9,8 @@
    <!--<div id="nav">
       <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
     </div>-->
-   <router-view @authenticated="setAuthenticated" />
+   <!--<router-view @authenticated="setAuthenticated" /> -->
+   <router-view/>
   </div>
 </template>
  
@@ -36,13 +37,13 @@ export default {
     }
   },
   methods: {
-    setAuthenticated(status) {
+   /* setAuthenticated(status) {
       this.authenticated = status;
     },
     logout() {
       this.$session.destroy()
       this.authenticated = false
-    }
+    }*/
   }
 };
 </script>

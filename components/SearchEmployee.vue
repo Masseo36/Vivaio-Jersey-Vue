@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="searchform-employee">
     <h4>Trova per nome</h4>
     <div class="form-group">
@@ -203,7 +203,7 @@ export default {
       this.name = "";
       this.surname = "";
       if (this.foundedEmployees.length == 0)
-        window.alert("Nessun employee trovato!");
+       this.$alert("Nessun employee trovato!", "Attenzione", 'warning')
     }
     /* eslint-enable no-console */
   }

@@ -140,16 +140,16 @@ export default {
           0 /*||
         this.employee.password.length == 0*/
       ) {
-        window.alert("Riempire tutti i campi!");
+       this.$alert("Riempire tutti i campi", "Errore", 'error')
       } else if (!this.employee.username.includes("@")) {
-        window.alert("Inserire un indirizzo e-mail corretto!");
+       this.$alert("Inserire un indirizzo e-mail corretto!", "Errore", 'error')
       } else {
         //controllo che non esista uno username uguale e setto la variabile isPresent
         this.employees.forEach(employee => {
           if (employee.username == data.username) this.isPresent = true;
         });
         if (this.isPresent == true) {
-          window.alert("e-mail già presente!");
+          this.$alert("Username già presente!", "Errore", 'error')
           //se isPresent è true do il messaggio di errore e risetto variabile a false
           this.isPresent = false;
         } else {
@@ -160,6 +160,11 @@ export default {
             .then(response => {
               this.employee = response.data;
               //this.$emit("authenticated", true);
+              this.$alert(
+                "Abbiamo inviato una e-mail alla tua casella di posta",
+                "Registrazione avvenuta!",
+                "success"
+              );
               this.$router.replace("/primoAccesso", () => {});
             })
             .catch(e => {
@@ -167,16 +172,16 @@ export default {
             });
         }
       }
-      this.submitted = true;
-    },
-    sendEmail() {
+      //this.submitted = true;
+    }
+    /* sendEmail() {
       http.post(
         "/registraEmployee/" +
           this.employee.username +
           "registraEmployee/" +
           this.employee.password
       );
-    }
+    }*/
   },
   mounted() {
     this.retrieveEmployees();

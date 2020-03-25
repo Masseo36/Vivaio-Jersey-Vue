@@ -84,7 +84,7 @@ export default {
       }
     },
     refresh() {
-      window.alert("Modificato con successo!");
+       this.$alert("Modifica mezzo", "Modifica avvenuta!", "success");
     }
   },
   mounted() {

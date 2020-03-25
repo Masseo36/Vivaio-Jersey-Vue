@@ -96,7 +96,6 @@ export default {
         });
     },
     updateMezzo() {
-      if (window.confirm("Confermi la modifica?")) {
         var data = {
           targa: this.mezzo.targa,
           marca: this.mezzo.marca,
@@ -104,13 +103,34 @@ export default {
           tipoAlimentazione: this.mezzo.tipoAlimentazione.carburante
         };
         if (this.mezzo.targa.length != 7) {
-          window.alert("La targa deve contenere 7 caratteri!");
+         this.$alert("La targa deve contenere 7 caratteri!", "Errore", "error");
         } else if (
           this.mezzo.marca.length == 0 ||
           this.mezzo.modello.length == 0
         ) {
-          window.alert("Riempire tutti i campi!");
-        } else {
+         this.$alert("Riempire tutti i campi!", "Errore", "error");
+        }
+        else {
+        this.$confirm(
+          "Confermi la modifica?",
+          "Modifica mezzo",
+          "question"
+        ).then(() => {
+          http
+            .put("/mezzi/update/" + this.mezzo.idMezzo, data)
+            .then(response => {
+              console.log(response.data);
+              this.refresh();
+              //Terminato il metodo, andrò alla seguente pagina
+              this.$router.push("/mezzi");
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        });
+      }
+        
+        /*else {
           http
             .put("/mezzi/update/" + this.mezzo.idMezzo, data)
             .then(response => {
@@ -121,11 +141,10 @@ export default {
             .catch(e => {
               console.log(e);
             });
-        }
-      }
+      }*/
     },
     refresh() {
-      window.alert("Modificato con successo!");
+      this.$alert("Modifica mezzo", "Modifica avvenuta!", "success");
     }
   },
   mounted() {

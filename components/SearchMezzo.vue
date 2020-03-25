@@ -317,7 +317,7 @@ export default {
       this.marca = "";
       this.modello = "";
       this.carburante = "";
-      if (this.mezziTrovati.length == 0) window.alert("Nessun mezzo trovato!");
+      if (this.mezziTrovati.length == 0) this.$alert("Nessun mezzo trovato!", "Attenzione", 'warning')
       this.retrieveMezzi();
     }
     /* eslint-enable no-console */

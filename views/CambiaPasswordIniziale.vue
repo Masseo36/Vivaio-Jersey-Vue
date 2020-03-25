@@ -5,9 +5,9 @@
         <h2 class="text-center">Sostituisci password iniziale</h2>
       </div>
       <hr />
-     <div class="modal-body">
+      <div class="modal-body">
         <form action role="form">
-         <!-- <div class="form-group">
+          <!-- <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-user"></span>
@@ -59,7 +59,7 @@ export default {
       //Questa riga consente di portare in questa pagina l'id dell'oggetto
       //dalla pagina di provenienza
       id: this.$route.params.id,
-      nuovaPassword: "",
+      nuovaPassword: ""
     };
   },
   methods: {
@@ -83,8 +83,10 @@ export default {
             this.nuovaPassword
         )
         .then(
+          //La sessione inizia
+          this.$session.start(),
           (this.active = true),
-          this.$emit("authenticated", true),
+          //this.$emit("authenticated", true),
           this.$router.push("/employees")
         );
     }

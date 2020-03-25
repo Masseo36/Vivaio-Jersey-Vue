@@ -60,25 +60,31 @@ export default {
   data() {
     return {
       username: "",
-      password: "",
+      password: ""
     };
   },
   methods: {
     primoAccesso() {
       if (this.username != "" && this.password != "") {
-        console.log(this.username)
+        console.log(this.username);
         http
           .post("/login/" + this.username + "login/" + this.password)
           .then(response => {
             this.employees = response.data; // JSON are parsed automatically.
             if (this.employees.length > 0) {
-              this.$router.push({ path: "/CambiaPasswordIniziale/" + this.employees[0].id });
+              this.$router.push({
+                path: "/CambiaPasswordIniziale/" + this.employees[0].id
+              });
             } else {
-              window.alert("Username e/o password errati! Controlla i dati che ti abbiamo inviato");
+              this.$alert(
+                "Username e/o password errati, controlla i dati che ti abbiamo inviato",
+                "Errore",
+                "error"
+              );
             }
           });
       } else {
-        window.alert("Riempire tutti i campi!");
+        this.$alert("Riempire tutti i campi", "Errore", "error");
       }
     }
   }

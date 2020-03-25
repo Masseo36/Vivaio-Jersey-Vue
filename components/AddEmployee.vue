@@ -81,7 +81,7 @@ export default {
         this.employee.surname.length == 0 ||
         this.employee.age <= 0
       ) {
-        window.alert("Riempire tutti i campi!");
+       this.$alert("Riempire tutti i campi", "Errore", 'error')
       } else {
         http
           .post("/create", data)
@@ -101,7 +101,7 @@ export default {
       this.employee = {};
     },
     refresh() {
-      window.alert("Aggiunto con successo!");
+      this.$alert("Aggiungi utente", "Utente aggiunto!", "success");
       this.employee.name = "";
       this.employee.surname = "";
       this.employee.age = "";

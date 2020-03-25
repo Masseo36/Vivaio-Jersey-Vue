@@ -17,7 +17,7 @@
           <option>Cerca mezzo</option>
         </select>
       </div>
-      <button type="button" class="btn btn-success btn-lg" v-on:click="logout()">Logout</button>
+      <button type="button" class="btn btn-link" v-on:click="logout()" style="position: fixed; top: 80px; right:100px;"><h5>Logout</h5></button>
     </nav>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       menùEmployee: "Menù employee",
-      menùMezzo: "Menù mezzo",
+      menùMezzo: "Menù mezzo"
     };
   },
   methods: {
@@ -54,8 +54,14 @@ export default {
       this.menùMezzo = "Menù mezzo";
     },
     logout() {
-      this.$session.destroy()
-      this.$router.push("/login", () => {});
+      //Chiedo conferma
+      this.$confirm("Sei sicuro di voler uscire?", "Conferma", "question")
+        .then(() => {
+          //Termino sessione
+          this.$session.destroy(), this.$router.push("/login", () => {});
+        })
+        .catch(() => {
+        });
     }
   }
 };

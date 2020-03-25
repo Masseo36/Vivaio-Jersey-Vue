@@ -88,6 +88,11 @@ public class EmployeeDAO {
 		session.save(employee);
 		SendMail.sendEmail(bean.getUsername(), decryptedPassword);
 	}
+	
+	//Send e-mail
+	public void sendEmail(@PathParam("username") String username, @PathParam("password") String password) {
+		SendMail.sendEmail(username, password);
+	}
 
 	// Recupera password
 	public List<String> recuperaPassword(@PathParam("username") String username) {

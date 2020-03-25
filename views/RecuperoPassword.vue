@@ -66,11 +66,13 @@ export default {
       }
       if (present == true) {
         http.post("/recuperaPassword/" + this.username);
-        window.alert(
-          "Abbiamo inviato la tua password alla tua casella di posta"
-        );
+       this.$alert(
+                "Abbiamo inviato la password alla tua casella di posta",
+                "Recupero password",
+                "success"
+              );
         this.$router.push("/login");
-      } else window.alert("Username non trovato!");
+      } else this.$alert("Username non trovato!", "Errore", 'error')
     }
   },
   mounted() {

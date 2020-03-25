@@ -1,5 +1,5 @@
 <template>
-   <div class="updateEmployee" id="updateEmployee">
+  <div class="updateEmployee" id="updateEmployee">
     <div class="form-group">
       <label for="name">
         <h4>Name</h4>
@@ -44,8 +44,9 @@
       />
     </div>
     <button v-on:click="updateEmployee()" class="btn btn-success">CONFERMA</button>
-  <div class="cuboDecorativo">
-      <h2 style="color:orangered;">MODIFICA EMPLOYEE</h2></div>
+    <div class="cuboDecorativo">
+      <h2 style="color:orangered;">MODIFICA EMPLOYEE</h2>
+    </div>
   </div>
 </template>
 	<script>
@@ -77,19 +78,23 @@ export default {
     },
     // Aggiorno l'oggetto
     updateEmployee() {
-      if (window.confirm("Confermi la modifica?")) {
-        var data = {
-          name: this.employee.name,
-          surname: this.employee.surname,
-          age: this.employee.age
-        };
-        if (
-          this.employee.name.length <= 0 ||
-          this.employee.surname.length <= 0 ||
-          this.employee.age <= 0
-        ) {
-          window.alert("Riempire tutti i campi!");
-        } else {
+      var data = {
+        name: this.employee.name,
+        surname: this.employee.surname,
+        age: this.employee.age
+      };
+      if (
+        this.employee.name.length <= 0 ||
+        this.employee.surname.length <= 0 ||
+        this.employee.age <= 0
+      ) {
+        this.$alert("Riempire tutti i campi", "Errore", "error");
+      } else {
+        this.$confirm(
+          "Confermi la modifica?",
+          "Modifica utente",
+          "question"
+        ).then(() => {
           http
             .put("/employees/update/" + this.employee.id, data)
             .then(response => {
@@ -101,11 +106,11 @@ export default {
             .catch(e => {
               console.log(e);
             });
-        }
+        });
       }
     },
     refresh() {
-      window.alert("Modificato con successo!");
+      this.$alert("Modifica utente", "Modifica avvenuta!", "success");
     }
   },
   mounted() {
@@ -124,7 +129,7 @@ export default {
 .updateEmployee {
   max-width: 300px;
   margin: auto;
-  color:orangered;
+  color: orangered;
 }
 .cuboDecorativo {
   position: absolute;

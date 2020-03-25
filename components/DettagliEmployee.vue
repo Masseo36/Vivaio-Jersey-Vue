@@ -70,18 +70,15 @@ export default {
         });
     },
     deleteEmployee() {
-      if (window.confirm("Confermi l'eliminazione?")) {
-        http
-          .delete("/delete/" + this.employee.id)
-          .then(response => {
+      this.$confirm("Confermi la cancellazione?", "Cancellazione utente", "question")
+        .then(() => {
+          http.delete("/delete/" + this.employee.id).then(response => {
             console.log(response.data);
             this.$emit("refreshData");
             this.$router.push("/employees");
-          })
-          .catch(e => {
-            console.log(e);
           });
-      }
+        })
+        .catch(() => {});
     }
   },
   mounted() {

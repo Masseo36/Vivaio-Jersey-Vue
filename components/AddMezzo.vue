@@ -96,7 +96,7 @@ export default {
         tipoAlimentazione: this.mezzo.tipoAlimentazione
       };
       if (this.mezzo.targa.length != 7) {
-        window.alert("La targa deve contenere 7 caratteri!");
+        this.$alert("La targa deve contenere 7 caratteri!", "Errore", "error");
         console.log(this.mezzo.targa);
       } else {
         http
@@ -119,7 +119,7 @@ export default {
       this.mezzo = {};
     },
     refresh() {
-      window.alert("Aggiunto con successo!");
+       this.$alert("Aggiungi mezzo", "Mezzo aggiunto con successo!", "success");
       this.mezzo.targa = "";
       this.mezzo.marca = "";
       this.mezzo.modello = "";
