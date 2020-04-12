@@ -24,6 +24,8 @@ public class Employee {
 	private String password;
 	@Column
 	private boolean active;
+	@Column
+	private String role;
 
 	public int getId() {
 		return id;
@@ -81,9 +83,18 @@ public class Employee {
 		this.active = active;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", age=" + age + ", username="
-				+ username + ", password=" + password + ", active=" + active + "]";
+				+ username + ", password=" + password + ", active=" + active + ", role=" + role + "]";
 	}
+
 }

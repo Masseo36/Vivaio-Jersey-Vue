@@ -1,33 +1,101 @@
 <template>
-  <div class="header">
-    <nav>
-      <div class="custom-dropdown" style="position:relative; top: 10px; right: 300px;">
-        <select v-model="menùEmployee" v-on:change="changeRout">
-          <option disabled>{{menùEmployee}}</option>
-          <option>Lista employees</option>
-          <option>Aggiungi employee</option>
-          <option>Cerca employee</option>
-        </select>
-      </div>
-      <div class="custom-dropdown" style="position:relative; top: 10px; left: 325px;">
-        <select v-model="menùMezzo" v-on:change="changeRout">
-          <option disabled>{{menùMezzo}}</option>
-          <option>Lista mezzi</option>
-          <option>Aggiungi mezzo</option>
-          <option>Cerca mezzo</option>
-        </select>
-      </div>
-      <button type="button" class="btn btn-link" v-on:click="logout()" style="position: fixed; top: 80px; right:100px;"><h5>Logout</h5></button>
-    </nav>
-  </div>
+  <nav>
+    <v-row wrap>
+      <v-app-bar text app>
+        <v-app-bar-nav-icon @click="drawer = !drawer" class="grey--text"></v-app-bar-nav-icon>
+        <v-col md3>
+          <v-toolbar-title class="text-uppercase grey--text">
+            <span class="font-weight-light">Jersey&vue</span>
+            <span>App</span>
+          </v-toolbar-title>
+        </v-col>
+
+        <v-spacer></v-spacer>
+
+        <v-col md2 offset-md="4">
+          <v-menu v-model="menuEmployees" :close-on-content-click="false" :nudge-width="200" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark v-on="on">
+                <v-icon left>person</v-icon>Menu employees
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item
+                v-for="(pagina, index) in pagineEmployee"
+                :key="index"
+                router
+                :to="pagina.route"
+              >
+                <v-list-item-title>{{ pagina.text }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
+
+        <v-col md2>
+           <v-menu v-model="menuMezzi" :close-on-content-click="false" :nudge-width="200" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn color="red" dark v-on="on">
+                <v-icon left>directions_car</v-icon>Menu mezzi
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(pagina, index) in pagineMezzi"
+                :key="index"
+                router
+                :to="pagina.route"
+              >
+                <v-list-item-title>{{ pagina.text }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
+
+        <v-col md1>
+          <v-btn text color="light-blue lighten-2" @click="logout">
+            <span>Logout</span>
+            <v-icon right>exit_to_app</v-icon>
+          </v-btn>
+        </v-col>
+      </v-app-bar>
+    </v-row>
+
+    <v-navigation-drawer app v-model="drawer" class="indigo">
+      <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
+        <v-list-item-action>
+          <v-icon class="white--text">{{link.icon}}</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title class="white--text">{{link.text}}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-navigation-drawer>
+  </nav>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      menùEmployee: "Menù employee",
-      menùMezzo: "Menù mezzo"
+      drawer: false,
+      menuEmployees: "",
+      menuMezzi: "",
+      links: [
+        { icon: "person", text: "Tutti gli employees", route: "/employees" },
+        { icon: "directions_car", text: "Tutti i mezzi", route: "/mezzi" }
+      ],
+      pagineEmployee: [
+        { icon: "person", text: "Tutti gli employees", route: "/employees" },
+        { icon: "person", text: "Cerca employe", route: "/ricercaEmployee" },
+        { icon: "person", text: "Aggiungi employe", route: "/create" }
+      ],
+      pagineMezzi: [
+        { icon: "person", text: "Tutti i mezzi", route: "/mezzi" },
+        { icon: "person", text: "Cerca mezzo", route: "/ricercaMezzi" },
+        { icon: "person", text: "Aggiungi mezzo", route: "/addMezzo" }
+      ]
     };
   },
   methods: {
@@ -60,88 +128,11 @@ export default {
           //Termino sessione
           this.$session.destroy(), this.$router.push("/login", () => {});
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     }
   }
 };
 </script>
 
 <style scoped>
-nav {
-  background: rgb(130, 229, 229);
-  padding: 14px 0;
-  margin-bottom: 40px;
-}
-.header {
-  max-width: 100%;
-  margin: auto;
-  color: rgb(130, 229, 229);
-}
-.custom-dropdown {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  margin: 10px; /* demo only */
-  font-family: cursive;
-  font-size: 20px;
-}
-.custom-dropdown select {
-  background-color: rgb(130, 229, 229);
-  color: #fff;
-  font-size: inherit;
-  padding: 0.5em;
-  padding-right: 2.5em;
-  border: 0;
-  margin: 0;
-  border-radius: 3px;
-  text-indent: 0.01px;
-  text-overflow: "";
-  /*Hiding the select arrow for firefox*/
-  -moz-appearance: none;
-  /*Hiding the select arrow for chrome*/
-  -webkit-appearance: none;
-  /*Hiding the select arrow default implementation*/
-  appearance: none;
-}
-/*Hiding the select arrow for IE10*/
-.custom-dropdown select::-ms-expand {
-  display: none;
-}
-
-.custom-dropdown::before,
-.custom-dropdown::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.custom-dropdown::after {
-  /*  Custom dropdown arrow */
-  content: "\25BC";
-  height: 1em;
-  font-size: 0.625em;
-  line-height: 1;
-  right: 1.2em;
-  top: 50%;
-  margin-top: -0.5em;
-}
-
-/*.custom-dropdown::before {
-  
-  width: 2em;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 0 3px 3px 0;
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.custom-dropdown::after {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.custom-dropdown select[disabled] {
-  color: rgba(0, 0, 0, 0.25);
-}*/
 </style>

@@ -1,70 +1,88 @@
 <template>
-  <div class="mezzi-list">
-    <div class="cuboDecorativo"></div>
-    <h4 style="position: relative; top: 4em; right: 25em; color: orangered">Lista mezzi</h4>
-    <!-- <h4 style="color: orangered">Mezzi</h4>-->
-    <div
-      v-for="(mezzo, index) in mezzi"
-      :key="index"
-      style="position: relative; top: 8em; right: 30em;"
-    >
-      <router-link
-        :to="{
+  <v-container class="my-5">
+    <v-card raised style="background: #F9FBE7" class="mt-8 mx-auto" width="1000">
+      <v-card-title>
+        <h1 class="subheading grey--text">Mezzi</h1>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="modelloMezzo"
+          append-icon="mdi-magnify"
+          label="Cerca per modello"
+          single-line
+          hide-detail
+        ></v-text-field>
+      </v-card-title>
+      <v-container>
+        <v-row row wrap>
+          <v-col md="2">
+            <div class="caption blue--text">
+              <h5>Targa</h5>
+            </div>
+          </v-col>
+          <v-col md="2" class="ml-10">
+            <div class="caption blue--text">
+              <h5>Marca</h5>
+            </div>
+          </v-col>
+          <v-col md="2" class="ml-10">
+            <div class="caption blue--text">
+              <h5>Modello</h5>
+            </div>
+          </v-col>
+          <v-col md="2" class="ml-8">
+            <div class="caption blue--text">
+              <h5>Alimentazione</h5>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-col flat v-for="(mezzo, index) in mezzi" :key="index">
+          <v-row
+            row
+            wrap
+            class="mt-n6"
+            v-if=" (mezzo.modello).toUpperCase() == modelloMezzo.toUpperCase() || modelloMezzo.length == 0"
+          >
+            <v-col  class="ml-n3">
+              <div class="caption orange--text">
+                <h4>{{mezzo.targa}}</h4>
+              </div>
+            </v-col>
+            <v-col  class="ml-n3">
+              <div class="caption orange--text">
+                <h4>{{mezzo.marca}}</h4>
+              </div>
+            </v-col>
+            <v-col class="ml-n3">
+              <div class="caption orange--text">
+                <h4>{{mezzo.modello}}</h4>
+              </div>
+            </v-col>
+            <v-col class="ml-n3">
+              <div class="caption orange--text">
+                <h4>{{mezzo.tipoAlimentazione.carburante}}</h4>
+              </div>
+            </v-col>
+            <v-flex xs4 md2>
+              <router-link
+                :to="{
                             name: 'mezzo-dettagli',
                             params: { mezzo: mezzo, idMezzo: mezzo.idMezzo }
                         }"
-      >
-        <h4>
-          {{mezzo.targa}}
-          {{mezzo.marca}}
-          {{mezzo.modello}}
-          {{mezzo.tipoAlimentazione.carburante}}
-        </h4>
-      </router-link>
-    </div>
-    <div class="col-md-6">
-      <router-view @refreshData="refreshList"></router-view>
-    </div>
-    <p></p>
-    <div class="ricercaModello">
-      <h4
-        style="position:absolute; top: 11em; right: 25em; color: orangered"
-      >Mezzo: ricerca puntuale per modello</h4>
-      <input
-        type="text"
-        v-model="modelloMezzo"
-        placeholder="Inserire modello"
-        style="position:absolute; top: 20em; right: 54em;"
-      />
-      <div
-        v-for="(mezzo, index) in mezzi"
-        :key="index"
-        style="position:relative; top: 6em; right: 8em"
-      >
-        <router-link
-          :to="{
-                            name: 'mezzi-dettagli',
-                            params: { mezzo: mezzo, idMezzo: mezzo.idMezzo }
-                        }"
-        >
-          <div v-if=" (mezzo.modello).toUpperCase() == modelloMezzo.toUpperCase()">
-            <h4>{{mezzo.targa}} {{mezzo.marca}}{{mezzo.modello}}{{mezzo.tipoAlimentazione.carburante}}</h4>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="fotoMezzo" style="position:absolute; top: 18em; right: 0em">
-      <p>
-        <img
-          src="https://cdn.pixabay.com/photo/2017/07/29/22/18/drawing-2552889_1280.png"
-          width="700"
-          height="400"
-        />
-      </p>
-    </div>
-  </div>
+              >
+                <v-btn class="ma-2" color="primary">
+                  Dettagli
+                  <v-icon dark right>description</v-icon>
+                </v-btn>
+              </router-link>
+            </v-flex>
+          </v-row>
+        </v-col>
+      </v-container>
+    </v-card>
+  </v-container>
 </template>
- 
+
 <script>
 import http from "../http-common";
 
@@ -73,7 +91,7 @@ export default {
   data() {
     return {
       mezzi: [],
-      modelloMezzo: "",
+      modelloMezzo: ""
     };
   },
   methods: {
@@ -106,33 +124,4 @@ export default {
 </script>
  
 <style scoped>
-.cuboDecorativo {
-  /* position: relative;
-  width: 250px;
-  background: #c3ebec;
-  overflow: hidden;*/
-
-  position: absolute;
-  content: "";
-  bottom: -50px;
-  left: -100px;
-  height: 250px;
-  width: 400px;
-  background: #f8b7d8;
-  transform: rotate(25deg);
-
-  position: absolute;
-  content: "";
-  bottom: 200px;
-  right: -100px;
-  height: 270px;
-  width: 400px;
-  background: #9ed9eb;
-  transform: rotate(-25deg);
-}
-.list {
-  text-align: left;
-  max-width: 450px;
-  margin: auto;
-}
 </style>

@@ -1,64 +1,86 @@
 <template>
-  <div class="employees-list">
-    <div class="cuboDecorativo"></div>
-    <h4 style="position: relative; top: 4em; right: 25em; color: orangered">Lista employees</h4>
-    <div
-      v-for="(employee, index) in employees"
-      :key="index"
-      style="position: relative; top: 8em; right: 38em;"
-    >
-      <router-link
-        :to="{
+  <v-container class="my-5">
+    <v-row wrap class="mb-n6 ml-6">
+      <v-col md="2" offset-md="1">
+        <v-btn small color="primary" @click="sortBy('surname')">
+          <v-icon medium left>sort_by_alpha</v-icon>
+          <span class="caption text-lowercase">Ordina per cognome</span>
+        </v-btn>
+      </v-col>
+      <v-col md="2">
+        <v-btn small color="primary" @click="sortBy('age')">
+          <v-icon medium left>event</v-icon>
+          <span class="caption text-lowercase">Ordina per età</span>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-card raised style="background: #F9FBE7" class="mt-8 mx-auto" width="850">
+      <v-card-title>
+        <h1 class="subheading grey--text">Employees</h1>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model.trim="search"
+          append-icon="mdi-magnify"
+          label="Ricerca puntuale"
+          single-line
+          hide-detail
+        ></v-text-field>
+      </v-card-title>
+      <v-container>
+        <v-row row wrap>
+          <v-col md="2">
+            <div class="headline font-weight-medium blue--text">
+              <h5>Nome</h5>
+            </div>
+          </v-col>
+          <v-col md="2">
+            <div class="headline font-weight-medium blue--text">
+              <h5>Cognome</h5>
+            </div>
+          </v-col>
+          <v-col md="2">
+            <div class="headline font-weight-medium blue--text">Età</div>
+          </v-col>
+        </v-row>
+        <v-col >
+          <v-row row wrap class="mt-n6" v-for="employee in filterData" :key="employee.id">
+            <v-col md="2" class="ml-n4">
+              <div class="headline font-weight-medium orange--text">{{employee.name}}</div>
+            </v-col>
+            <v-col md="2" class="ml-2">
+              <div class="headline font-weight-medium orange--text">{{employee.surname}}</div>
+            </v-col>
+            <v-col md="2" class="ml-2">
+              <div class="headline font-weight-medium orange--text">{{employee.age}}</div>
+            </v-col>
+            <v-col md="3">
+              <router-link
+                :to="{
                             name: 'employee-dettagli',
                             params: { employee: employee, id: employee.id }
                         }"
-      >
-        <h4>{{employee.name}} {{employee.surname}}</h4>
-      </router-link>
-    </div>
-    <div class="col-md-6">
-      <router-view @refreshData="refreshList"></router-view>
-    </div>
-    <p></p>
-    <div class="ricercaCognome">
-      <h4
-        style="position:absolute; top: 11em; right: 25em; color: orangered"
-      >Employees: ricerca puntuale per cognome</h4>
-      <input
-        type="text"
-        v-model="surnameEmployee"
-        placeholder="Inserire cognome"
-        style="position:absolute; top: 20em; right: 54em;"
-      />
-      <div
-        v-for="(employee, index) in employees"
-        :key="index"
-        style="position:relative; top: 6em; right: 12em"
-      >
-        <router-link
-          :to="{
-                            name: 'employee-dettagli',
-                            params: { employee: employee, id: employee.id }
-                        }"
-        >
-          <div v-if=" (employee.surname).toUpperCase() == surnameEmployee.toUpperCase()">
-            <h4>{{employee.name}} {{employee.surname}}</h4>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="fotoEmployee" style="position:absolute; top: 18em; right: 8em">
-      <p>
-        <img
-          src="https://cdn.pixabay.com/photo/2016/03/19/16/50/checklist-1266989_1280.png "
-          width="400"
-          height="400"
-        />
-      </p>
-    </div>
-  </div>
+              >
+                <v-btn color="primary" class="mb-5">
+                  Dettagli
+                  <v-icon dark right>description</v-icon>
+                </v-btn>
+              </router-link>
+            </v-col>
+            <v-col md="2" class="ml-2">
+              <div v-if="employee.active" class="headline font-weight-medium orange--text">
+                <v-chip class="green white--text">Attivo</v-chip>
+              </div>
+              <div v-else class="headline font-weight-medium orange--text">
+                <v-chip class="red white--text">Inattivo</v-chip>
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-container>
+    </v-card>
+  </v-container>
 </template>
- 
+
 <script>
 import http from "../http-common";
 
@@ -66,13 +88,27 @@ export default {
   name: "employees-list",
   data() {
     return {
-      //Questa riga consente di portare in questa pagina l'id dell'oggetto
-      //dalla pagina di provenienza
-      id: this.$route.params.id,
+      search: "",
       employees: [],
-      surnameEmployee: "",
-      isEditing: false
+      employee: "",
+      surnameEmployee: ""
     };
+  },
+  computed: {
+    filterData() {
+      var reg = new RegExp(this.search, "i");
+      var data = [];
+
+      for (var i in this.employees) {
+        if (
+          this.employees[i].name.match(reg) ||
+          this.employees[i].surname.match(reg)
+        ) {
+          data.push(this.employees[i]);
+        }
+      }
+      return data;
+    }
   },
   methods: {
     /* eslint-disable no-console */
@@ -89,8 +125,13 @@ export default {
     },
     refreshList() {
       this.retrieveEmployees();
+    },
+    goToUpdatePage() {
+      console.log("ciao");
+    },
+    sortBy(prop) {
+      this.employees.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     }
-    /* eslint-enable no-console */
   },
   filters: {
     uppercase: function(v) {
@@ -99,40 +140,9 @@ export default {
   },
   mounted() {
     this.retrieveEmployees();
-  },
+  }
 };
 </script>
  
 <style scoped>
-.cuboDecorativo {
-  position: absolute;
-  content: "";
-  bottom: -50px;
-  left: -100px;
-  height: 250px;
-  width: 400px;
-  background: #f8b7d8;
-  transform: rotate(25deg);
-
-  position: absolute;
-  content: "";
-  bottom: 200px;
-  right: -100px;
-  height: 270px;
-  width: 400px;
-  background: #9ed9eb;
-  transform: rotate(-25deg);
-}
-
-::-webkit-input-placeholder {
-  background-color: lightcyan;
-  color: black;
-  font-size: 18px;
-  font-family: cursive;
-}
-.employee-list {
-  text-align: left;
-  max-width: 450px;
-  margin: auto;
-}
 </style>

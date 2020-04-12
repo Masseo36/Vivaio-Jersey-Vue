@@ -1,51 +1,74 @@
 <template>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-heading">
-        <h2 class="text-center">Login</h2>
-      </div>
-      <hr />
-      <div class="modal-body">
-        <form action role="form">
-          <div class="form-group">
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                v-model="username"
-                placeholder="Username"
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-              </span>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                v-model="password"
-                placeholder="Password"
-              />
-            </div>
-          </div>
+  <v-app id="inspire" style="background: #c0ded9">
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-12">
+              <v-toolbar color="primary" dark flat>
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer />
+                <v-tooltip bottom></v-tooltip>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon large target="_blank" v-on="on" @click="goToRegistration">
+                      <v-icon>person_add</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Registrati</span>
+                </v-tooltip>
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    label="username"
+                    name="username"
+                    prepend-icon="person"
+                    type="text"
+                    v-model="username"
+                    :rules="inputRules"
+                  />
 
-          <div class="form-group text-center">
-            <button type="button" class="btn btn-success btn-lg" v-on:click="login()">Login</button>
-            <router-link to="recuperoPassword" class="btn btn-link">recupera Password</router-link>
-            <router-link to="registraEmployee" class="btn btn-link">Non hai un account? Registrati!</router-link>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    prepend-icon="lock"
+                    type="password"
+                    v-model="password"
+                  />
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn color="primary" rounded @click="login">Login</v-btn>
+              </v-card-actions>
+              <v-card-actions>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      color="primary"
+                      icon
+                      large
+                      target="_blank"
+                      v-on="on"
+                      @click="goToRecuperoPassword"
+                    >
+                      <v-icon>help</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Recupera password</span>
+                </v-tooltip>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
+
+
 <script>
 import http from "../http-common";
 export default {
@@ -53,11 +76,13 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      inputRules: [v => !!v || "Inserire un indirizzo e-mail"]
     };
   },
   methods: {
     login() {
+      console.log(this.username);
       if (this.username != "" && this.password != "") {
         http
           .post("/login/" + this.username + "login/" + this.password)
@@ -75,23 +100,19 @@ export default {
             ) {
               this.$router.replace("/primoAccesso", () => {});
             } else if (this.employees.length == 0)
-              this.$alert("Username e/o password errati", "Errore", 'error')
+              this.$alert("Username e/o password errati", "Errore", "error");
           });
-      } else this.$alert("Riempire tutti i campi", "Errore", 'error')
+      } else this.$alert("Riempire correttamente tutti i campi", "Errore", "error");
+    },
+    goToRegistration() {
+      this.$router.push({ path: "/registraEmployee" });
+    },
+    goToRecuperoPassword() {
+      this.$router.push({ path: "/recuperoPassword" });
     }
   }
 };
 </script>
 
 <style scoped>
-.modal-content {
-  top: 75px;
-  background-color: rgba(9, 196, 196, 0.849);
-}
-.btn-link {
-  color: white;
-}
-.modal-heading h2 {
-  color: #ffffff;
-}
 </style>

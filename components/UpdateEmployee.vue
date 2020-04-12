@@ -1,54 +1,47 @@
 <template>
-  <div class="updateEmployee" id="updateEmployee">
-    <div class="form-group">
-      <label for="name">
-        <h4>Name</h4>
-      </label>
-      <input
-        placeholder="Inserire nome"
-        type="text"
-        class="form-control"
-        id="name"
-        required
-        v-model="employee.name"
-        name="name"
-      />
-    </div>
-    <div class="form-group">
-      <label for="surname">
-        <h4>Surname</h4>
-      </label>
-      <input
-        placeholder="Inserire cognome"
-        type="text"
-        class="form-control"
-        id="surname"
-        required
-        v-model="employee.surname"
-        name="surname"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="age">
-        <h4>Age</h4>
-      </label>
-      <input
-        type="number"
-        class="form-control"
-        id="age"
-        required
-        v-model="employee.age"
-        name="age"
-        placeholder="Inserire età"
-      />
-    </div>
-    <button v-on:click="updateEmployee()" class="btn btn-success">CONFERMA</button>
-    <div class="cuboDecorativo">
-      <h2 style="color:orangered;">MODIFICA EMPLOYEE</h2>
-    </div>
-  </div>
+  <v-container>
+    <v-card class="mx-auto mt-12" raised style="background: #F9FBE7 " width="750px">
+      <v-card-title>
+        <h1 class="subheading grey--text">Modifica employee</h1>
+      </v-card-title>
+      <v-col>
+        <v-form ref="form" class="md-5">
+          <v-text-field
+            style
+            v-model="employee.name"
+            label="Nome"
+            required
+            id="styled-input-update"
+            class="styled-input-update"
+          ></v-text-field>
+          <v-text-field
+            v-model="employee.surname"
+            label="Cognome"
+            required
+            id="styled-input-update"
+            class="styled-input-update"
+          ></v-text-field>
+          <v-text-field
+            v-model="employee.age"
+            label="Età"
+            required
+            id="styled-input-update"
+            class="styled-input-update"
+          ></v-text-field>
+          <v-btn class="ma-2" color="success" dark @click="updateEmployee">
+            Modifica
+            <v-icon dark right>done</v-icon>
+          </v-btn>
+          <v-btn class="ma-2" color="error" dark @click="goBack">
+            Indietro
+            <v-icon dark right>undo</v-icon>
+          </v-btn>
+        </v-form>
+      </v-col>
+    </v-card>
+  </v-container>
 </template>
+
 	<script>
 import http from "../http-common";
 
@@ -111,6 +104,9 @@ export default {
     },
     refresh() {
       this.$alert("Modifica utente", "Modifica avvenuta!", "success");
+    },
+    goBack() {
+      this.$router.push({ path: "/employees/dettagli/" + this.employee.id });
     }
   },
   mounted() {
@@ -120,25 +116,14 @@ export default {
 </script>
 
 <style>
-::-webkit-input-placeholder {
-  background-color: lightcyan;
-  color: black;
-  font-size: 18px;
-  font-family: cursive;
-}
-.updateEmployee {
-  max-width: 300px;
-  margin: auto;
+#styled-input-update {
+  height: 40px;
+  font-size: 20pt;
   color: orangered;
 }
-.cuboDecorativo {
-  position: absolute;
-  content: "";
-  bottom: 100px;
-  right: 60px;
-  height: 370px;
-  width: 400px;
-  background: #9ed9eb;
-  transform: rotate(-25deg);
+.styled-input-update label[for] {
+  height: 30px;
+  font-size: 15pt;
+  color: blue;
 }
 </style>

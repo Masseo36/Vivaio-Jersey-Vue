@@ -1,47 +1,75 @@
 <template>
-  <div v-if="this.mezzo">
-    <table
-      style="position: relative; top: 4em; "
-      id="mezzo"
-      width="50%"
-      border="1"
-      align="left"
-      bgcolor="lightblue"
-      bordercolor="blue"
-      bordercolorlight="#00CCFF"
-      bordercolordark="#000099"
-    >
-      <tr style=" bgcolor:blue">
-        <td style="color:black" bgcolor="orangered">Targa</td>
-        <td style="color:black" bgcolor="orangered">Marca</td>
-        <td style="color:black" bgcolor="orangered">Modello</td>
-        <td style="color:black" bgcolor="orangered">Carburante</td>
-      </tr>
-      <tr>
-        <td style="color:blue">{{this.mezzo.targa}}</td>
-        <td style="color:blue">{{this.mezzo.marca}}</td>
-        <td style="color:blue">{{this.mezzo.modello}}</td>
-        <td style="color:blue">{{this.mezzo.tipoAlimentazione.carburante}}</td>
-      </tr>
-    </table>
-    <button
-      type="button"
-      class="btn btn-danger"
-      style="position:relative; right: 45em;top: 20em;"
-      v-on:click="deleteMezzo()"
-    >CANCELLA</button>
-    <p></p>
-    <button
-      type="button"
-      class="btn btn-success"
-      style="position:relative; right: 45em;top: 12em;"
-      v-on:click="goToPage()"
-    >MODIFICA</button>
-    <div class="mezzoDetails">
-      <h2 style="color:orangered;">DETTAGLI MEZZO</h2>
-    </div>
-  </div>
+  <v-card v-if="this.mezzo" raised style="background: #F9FBE7" class="mt-12 mx-auto" width="1000" height="250">
+    <v-card-title>
+      <h1 class="subheading grey--text">Dettagli mezzo</h1>
+    </v-card-title>
+    <v-container>
+      <v-row row wrap >
+        <v-col md="2">
+          <div class="caption blue--text">
+            <h5>Targa</h5>
+          </div>
+        </v-col>
+         <v-col md="2">
+          <div class="caption blue--text">
+            <h5>Marca</h5>
+          </div>
+        </v-col>
+        <v-col md="2">
+          <div class="caption blue--text">
+            <h5>Modello</h5>
+          </div>
+        </v-col>
+        <v-col md="2">
+          <div class="caption blue--text">
+            <h5>Alimentazione</h5>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="mt-n5">
+       <v-col md="2">
+          <div class="caption orange--text">
+            <h4>{{mezzo.targa}}</h4>
+          </div>
+        </v-col>
+        <v-col md="2">
+          <div class="caption orange--text">
+            <h4>{{mezzo.marca}}</h4>
+          </div>
+        </v-col>
+       <v-col md="2">
+          <div class="caption orange--text">
+            <h4>{{mezzo.modello}}</h4>
+          </div>
+        </v-col>
+        <v-col md="2">
+          <div class="caption orange--text">
+            <h4>{{mezzo.tipoAlimentazione.carburante}}</h4>
+          </div>
+        </v-col>
+        <v-col md="2">
+          <v-btn color="primary" dark @click="goToPage">
+            Modifica
+            <v-icon dark right>mdi-pen</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-btn color="red" dark @click="deleteMezzo">
+            Cancella
+            <v-icon dark right>delete</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col md="2" class="ml-n2 mt-n5">
+          <v-btn small class="ma-2" color="blue" dark @click="goBack">
+            Indietro
+            <v-icon dark right>undo</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
+
 	<script>
 import http from "../http-common";
 
@@ -84,7 +112,10 @@ export default {
       }
     },
     refresh() {
-       this.$alert("Modifica mezzo", "Modifica avvenuta!", "success");
+      this.$alert("Modifica mezzo", "Modifica avvenuta!", "success");
+    },
+    goBack() {
+      this.$router.push({ path: "/mezzi" });
     }
   },
   mounted() {
@@ -114,4 +145,3 @@ th {
   border: 1px solid #ddd;
   padding: 8px;
 }
-</style>
