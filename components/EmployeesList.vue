@@ -1,5 +1,6 @@
 <template>
   <v-container class="my-5">
+    {{this.$store.state.products}}
     <v-row wrap class="mb-n6 ml-6">
       <v-col md="2" offset-md="1">
         <v-btn small color="primary" @click="sortBy('surname')">
@@ -83,7 +84,6 @@
 
 <script>
 import http from "../http-common";
-
 export default {
   name: "employees-list",
   data() {
@@ -117,7 +117,7 @@ export default {
         .get("/employees")
         .then(response => {
           this.employees = response.data; // JSON are parsed automatically.
-          console.log(response.data);
+          console.log(this.employees)
         })
         .catch(e => {
           console.log(e);
@@ -127,7 +127,6 @@ export default {
       this.retrieveEmployees();
     },
     goToUpdatePage() {
-      console.log("ciao");
     },
     sortBy(prop) {
       this.employees.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));

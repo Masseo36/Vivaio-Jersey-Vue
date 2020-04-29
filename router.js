@@ -22,6 +22,12 @@ import UpdateMezzo from "./components/UpdateMezzo.vue";
 import DettagliMezzo from "./components/DettagliMezzo.vue";
 
 import Prova from "./components/Prova";
+import EmployeesListFromVuex from "./components/EmployeesListFromVuex";
+import DettagliEmployeeVuex from "./components/DettagliEmployeeVuex";
+import UpdateEmployeeVuex from "./components/UpdateEmployeeVuex";
+import AddEmployeeVuex from "./components/AddEmployeeVuex";
+
+import MezziListFromVuex from "./components/MezziListFromVuex";
 
 Vue.use(Router);
 
@@ -140,5 +146,35 @@ export default new Router({
             component: Prova,
             props: true
         },
+        {
+            path: "/EmployeesListFromVuex",
+            name: "EmployeesListFromVuex",
+            component: EmployeesListFromVuex,
+            props: true
+        },
+        {
+            path: "/employees/dettagliVuex/:id",
+            name: "employee-dettagliVuex",
+            component: DettagliEmployeeVuex,
+            props: true
+        },
+        {
+            path: "/employees/updateEmployeeVuex/:id",
+            name: "employee-updateEmployeeVuex",
+            component: UpdateEmployeeVuex,
+            props: true
+        },
+        {
+            path: "/createEmployeeVuex",
+            name: "createEmployeeVuex",
+            component: AddEmployeeVuex
+        },
+        {
+            path: "/employessListFromVuex",
+            component: MezziListFromVuex,
+            beforeEnter: (/*to, from, next*/) => {
+                this.$store.state.moduleA.employees;
+            },
+        }
     ]
 });

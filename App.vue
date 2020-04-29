@@ -11,6 +11,7 @@
  
 <script>
 import Header from "./components/Header.vue";
+
 export default {
   components: {
     //Metto il component header, quello comune a tutte le pagine

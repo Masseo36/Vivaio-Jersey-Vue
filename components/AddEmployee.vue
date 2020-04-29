@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       employee: {
-        id: 0,
         name: "",
         surname: "",
         age: ""
@@ -85,8 +84,8 @@ export default {
       } else {
         http
           .post("/create", data)
-          .then(response => {
-            this.employee.id = response.data.id;
+          .then(() => {
+            console.log(data)
             this.refresh();
             this.$router.push("/employees");
           })
@@ -107,7 +106,7 @@ export default {
       this.employee.age = "";
     }
     /* eslint-enable no-console */
-  }
+  },
 };
 </script>
  

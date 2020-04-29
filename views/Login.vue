@@ -93,7 +93,7 @@ export default {
             console.log(this.$session.id());
             if (this.employees.length > 0 && this.employees[0].active == 1) {
               this.$emit("authenticated", true);
-              this.$router.replace("/employees", () => {});
+              this.$router.replace("/employeesListFromVuex", () => {});
             } else if (
               this.employees.length > 0 &&
               this.employees[0].active == 0

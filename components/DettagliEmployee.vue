@@ -184,6 +184,11 @@ export default {
       this.curriculum = false;
     }
   },
+   created() {
+    console.log(this.id)
+    //console.log(this.$route.params.obj)
+    console.log(window.location.pathname)
+  },
   mounted() {
     this.retrieveEmployeesById();
   }

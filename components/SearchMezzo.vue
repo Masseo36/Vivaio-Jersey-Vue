@@ -95,7 +95,8 @@
                             name: 'mezzo-dettagli',
                             params: { mezzo: mezzo, idMezzo: mezzo.idMezzo }
                         }"
-        ><h4>{{mezzo.targa}} {{mezzo.marca}} {{mezzo.modello}} {{mezzo.tipoAlimentazione.carburante}}</h4>
+        >
+          <h4>{{mezzo.targa}} {{mezzo.marca}} {{mezzo.modello}} {{mezzo.tipoAlimentazione.carburante}}</h4>
         </router-link>
       </li>
     </ul>
@@ -317,7 +318,8 @@ export default {
       this.marca = "";
       this.modello = "";
       this.carburante = "";
-      if (this.mezziTrovati.length == 0) this.$alert("Nessun mezzo trovato!", "Attenzione", 'warning')
+      if (this.mezziTrovati.length == 0)
+        this.$alert("Nessun mezzo trovato!", "Attenzione", "warning");
       this.retrieveMezzi();
     }
     /* eslint-enable no-console */
@@ -413,7 +415,6 @@ export default {
  
  
 <style scoped>
-
 .searchform-mezzo {
   max-width: 100%;
   margin: auto;

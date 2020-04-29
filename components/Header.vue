@@ -13,7 +13,12 @@
         <v-spacer></v-spacer>
 
         <v-col md2 offset-md="4">
-          <v-menu v-model="menuEmployees" :close-on-content-click="false" :nudge-width="200" offset-y>
+          <v-menu
+            v-model="menuEmployees"
+            :close-on-content-click="false"
+            :nudge-width="200"
+            offset-y
+          >
             <template v-slot:activator="{ on }">
               <v-btn color="primary" dark v-on="on">
                 <v-icon left>person</v-icon>Menu employees
@@ -34,7 +39,7 @@
         </v-col>
 
         <v-col md2>
-           <v-menu v-model="menuMezzi" :close-on-content-click="false" :nudge-width="200" offset-y>
+          <v-menu v-model="menuMezzi" :close-on-content-click="false" :nudge-width="200" offset-y>
             <template v-slot:activator="{ on }">
               <v-btn color="red" dark v-on="on">
                 <v-icon left>directions_car</v-icon>Menu mezzi
@@ -76,6 +81,7 @@
 </template>
 
 <script>
+import { employeeService } from "@/services/employeeService";
 export default {
   data() {
     return {
@@ -83,16 +89,16 @@ export default {
       menuEmployees: "",
       menuMezzi: "",
       links: [
-        { icon: "person", text: "Tutti gli employees", route: "/employees" },
-        { icon: "directions_car", text: "Tutti i mezzi", route: "/mezzi" }
+        { icon: "person", text: "Tutti gli employees", route: "/employeesListFromVuex" },
+        { icon: "directions_car", text: "Tutti i mezzi", route: "/mezziListFromVuex" }
       ],
       pagineEmployee: [
-        { icon: "person", text: "Tutti gli employees", route: "/employees" },
+        { icon: "person", text: "Tutti gli employees", route: "/employeesListFromVuex" },
         { icon: "person", text: "Cerca employe", route: "/ricercaEmployee" },
-        { icon: "person", text: "Aggiungi employe", route: "/create" }
+        { icon: "person", text: "Aggiungi employe", route: "/createEmployeeVuex" }
       ],
       pagineMezzi: [
-        { icon: "person", text: "Tutti i mezzi", route: "/mezzi" },
+        { icon: "person", text: "Tutti i mezzi", route: "/mezziListFromVuex" },
         { icon: "person", text: "Cerca mezzo", route: "/ricercaMezzi" },
         { icon: "person", text: "Aggiungi mezzo", route: "/addMezzo" }
       ]
@@ -129,7 +135,19 @@ export default {
           this.$session.destroy(), this.$router.push("/login", () => {});
         })
         .catch(() => {});
+    },
+    getListEmployees() {
+      const response = employeeService.getListEmployees(); //this.$store.state.employees
+      response
+        .then(result => {
+          this.employees = result.data;
+          this.$store.dispatch("moduleA/popolaStore", this.employees);
+        })
+        .catch(() => {});
     }
+  },
+  mounted() {
+    this.getListEmployees();
   }
 };
 </script>
